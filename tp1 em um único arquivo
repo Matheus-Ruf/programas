@@ -1,0 +1,214 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct racional
+{
+    unsigned short int valido; /* um racional eh invalido se den == 0 */
+    int num;                   /* numerador do racional               */
+    int den;                   /* denominador do racional             */
+};
+
+
+int mdc (int a, int b)
+{
+	int resto;
+	
+	while(b != 0)
+	{
+		resto = a % b;
+		a = b;
+		b = resto;
+	}
+	return a;
+}
+
+
+int mmc (int a, int b)
+{
+	return (a * b) / mdc (a, b);
+}
+
+
+struct racional simplifica_r (struct racional r)
+{
+	int i, x;
+	
+	if(r.den<0)
+	{
+		r.num = -r.num;
+		r.den = -r.den;
+	}
+	i=0;
+	if(r.num<0)
+	{
+		i=1;
+		r.num = -r.num;
+	}
+	
+	x=2;
+	while(r.num >= x
+	 &&   r.den >= x)
+	{
+		while(r.num % x == 0
+		 &&   r.den % x == 0)
+		{
+			r.num /= x;
+			r.den /= x;
+		}
+		x++;
+	}
+	
+	if(i == 1)
+		r.num = -r.num;
+	
+	return r;
+}
+
+
+struct racional cria_r (int numerador, int denominador)
+{
+	struct racional cria;
+	cria.num = numerador;
+	cria.den = denominador;
+	return cria;
+}
+
+
+int valido_r (struct racional r)
+{
+	if(r.den == 0)
+		return 0;
+	return 1;
+}
+
+
+int aleat (int min, int max)
+{
+	return min + rand() % (max - (min - 1));
+}
+
+
+struct racional sorteia_r (int n)
+{
+	struct racional sorteia;
+	sorteia.num = aleat(0, n);
+	sorteia.den = aleat(0, n);
+	sorteia.valido = valido_r(sorteia);
+	return sorteia;
+}
+
+
+void imprime_r (struct racional r)
+{
+	int i;
+	
+	r = simplifica_r(r);
+	if(r.den == 0)
+	{
+		printf("INVALIDO");
+		return;
+	}
+	
+	i = 0;
+	if(r.num == 0) //numerador 0, imprime zero
+		i += 1;
+	if(r.den == 1) //denominador 1, imprime numerador
+		i += 2;
+	if(r.num == r.den) //numerador igual denominador, imprime 1
+		i += 4;
+	switch(i)
+	{
+		case 0:
+			printf("%d/%d", r.num, r.den);
+			break;
+		case 1:
+		case 3:
+			printf("zero");
+			break;
+		case 2:
+			printf("%d", r.num);
+			break;
+		case 6:
+		case 4:
+			printf("1");
+			break;
+	}
+	return;
+}
+
+
+struct racional soma_r (struct racional r1, struct racional r2)
+{
+	struct racional soma;
+	soma.den = mmc(r1.den, r2.den);
+	soma.num = (soma.den / r1.den) * r1.num;
+	soma.num += (soma.den / r2.den) * r2.num;
+	return soma;
+}
+
+
+struct racional subtrai_r (struct racional r1, struct racional r2)
+{
+	struct racional sub;
+	sub.den = mmc(r1.den, r2.den);
+	sub.num = (sub.den / r1.den) * r1.num;
+	sub.num -= (sub.den / r2.den) * r2.num;
+	return sub;
+}
+
+
+struct racional multiplica_r (struct racional r1, struct racional r2)
+{
+	struct racional mult;
+	mult.num = r1.num * r2.num;
+	mult.den = r1.den * r2.den;
+	return mult;
+}
+
+
+struct racional divide_r (struct racional r1, struct racional r2)
+{
+	struct racional divi;
+	divi.num = r1.num * r2.den;
+	divi.den = r1.den * r2.num;
+	return divi;
+}
+
+
+int main()
+{
+    int n, max, i;
+    struct racional r1, r2, sm, sb, mt, dv; 
+    srand(10);
+    do{scanf("%d", &n);}while(0 > n || n > 100);
+    do{scanf("%d", &max);}while(0 > max || max > 30);
+    for(i=1; i<=n; i++)
+    {
+        printf("%d: ", i);
+        r1 = sorteia_r(max);
+        r2 = sorteia_r(max);
+        imprime_r(r1);
+        imprime_r(r2);
+        if(valido_r(r1)==0 || valido_r(r2)==0)
+        {
+            printf("NUMERO INVALIDO");
+            return 1;
+        }
+        sm = soma_r(r1, r2);
+        sb = subtrai_r(r1, r2);
+        mt = multiplica_r(r1, r2);
+        dv = divide_r(r1, r2);
+        if(valido_r(dv)==0)
+        {
+            printf("DIVISAO INVALIDA");
+            return 1;
+        }
+        imprime_r(sm);
+        imprime_r(sb);
+        imprime_r(mt);
+        imprime_r(dv);
+        printf("\n");
+    }
+    
+    return 0;
+}
