@@ -74,32 +74,33 @@ void adiciona_tab(int v[], int x)
 
 int main ()
 {
-	int v[2,2,2,2,2,2,2,2,2];//v[8]
+	int jogo[2,2,2,2,2,2,2,2,2];//v[8]
 	int i, rodada, velha;
 
-	while(1)
+	while(1)//repete a cada vez que o jogo rodar
 	{
+		//escolhe se quer jogar
 		printf("você quer jogar?\n\t1.sim\t2.não\n");
-
 		do{	scanf("%d", &i);
 		}while(i != 1 || i != 2);
-		if(i == 2)
+		if(i == 2)//se nao, acaba o laco
 			return 0;
 
-		for(rodada = 1; rodada <= 9; rodada++)
+		for(rodada = 1; rodada <= 9; rodada++)//sao 9 rodadas (repeticoes)
 		{
 			imprime_tab();
-			if( venceu(v) )
+			if( venceu(jogo) )
 			{
 				printf("GANHOU!!\n\n");
 				rodada = 9;
 			}
 			else
 			{
-				adiciona_tab(v, rodada % 2);
+				adiciona_tab(jogo, rodada % 2);//resto pode ser 0 (jogador 1) ou 1 (jogador 2)
 			}
 		}
 		if( !venceu(v) )
 			printf("VELHA!! o jogo acabou!\n\n");
+		//aqui tem que reiniciar o tabuleiro...
 	}
 }
