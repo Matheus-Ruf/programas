@@ -87,7 +87,7 @@ void imprime_tab_opcoes(int v[])
         if(v[i] == 2)
             printf("\t%d.", i+1);
         else
-            printf("\t  ");
+            printf("\t .");
             
         if(i % 3 == 2)
                 printf("\n");
@@ -101,6 +101,7 @@ void adiciona_tab(int v[], int jogador)// 0 (jogador 1) X ; 1 (jogador 2) O
     
     imprime_tab_opcoes(v);
     
+    printf("\n");
     do{
         if(jogador == 0)
          printf("jogador 1 (O): ");
@@ -123,6 +124,7 @@ void reinicia(int v[])
     return;
 }
 
+//O sempre comeca
 int main ()
 {
 	int jogo[8];//[2,2,2,2,2,2,2,2]
@@ -132,10 +134,14 @@ int main ()
 	{
 		//escolhe se quer jogar
 		printf("voce quer jogar?\n\t1.sim\t2.não\n");
-		do{	scanf("%d", &i);
+		do{
+		    printf("r: ");
+		    scanf("%d", &i);
 		}while(i != 1 && i != 2);
 		if(i == 2)//se nao, acaba o laco
 			return 0;
+		
+		printf("\n");
         
         reinicia(jogo);
         
@@ -149,12 +155,13 @@ int main ()
 			
 			if( venceu(jogo) )
 			{
-				printf("\t------GANHOU!!------\n\n");
+				printf("-------- GANHOU!! --------\n\n");
 				rodada = 9;
 			}
 		}
 		if( !venceu(jogo) )
-			printf("------VELHA!! o jogo acabou!------\n\n");
+			printf("--- VELHA!! o jogo acabou! ---\n\n");
 		imprime_tab(jogo);
+		printf("\n------------------------------\n\n");
 	}
 }
