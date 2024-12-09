@@ -493,15 +493,17 @@ void viaja (int t, struct heroi *h, struct base *d, struct mundo *w)
         return;
     
     distancia = distancia_cartesiana((w->bases + h->base)->local, d->local);
-    duracao = distancia / h->velocidade;
-    
-    printf("%6d: VIAJA  HEROI %2d BASE %d BASE %d DIST %d VEL %d CHEGA %d\n",
-    t, h->id, h->base, d->id, distancia, h->velocidade, t + duracao);
-    //falta bastante coisa kk
-    //veja como fica os frees do p_hb
-    
-    lixo = fprio_insere(w->lef, p3, 0, t + duracao);//chega(agora + duracao, h, d)
-    
+    if(h->velocidade > 0)
+    {    
+        duracao = distancia / h->velocidade;
+        
+        printf("%6d: VIAJA  HEROI %2d BASE %d BASE %d DIST %d VEL %d CHEGA %d\n",
+        t, h->id, h->base, d->id, distancia, h->velocidade, t + duracao);
+        //falta bastante coisa kk
+        //veja como fica os frees do p_hb
+        
+        lixo = fprio_insere(w->lef, p3, 0, t + duracao);//chega(agora + duracao, h, d)
+    }
     w->eventos_tratados++;
     return;
 }
@@ -741,10 +743,21 @@ void fim (int t, struct mundo *w)
         
         media_tentativas += (w->missoes + i)->tentativas;
     }
+
+    if(w->nmissoes > 0)
+        sucesso_missoes = (missoes_cumpridas / w->nmissoes) * 100;
+    else
+        sucesso_missoes = 0;
     
-    sucesso_missoes = (missoes_cumpridas / w->nmissoes) * 100;
-    media_tentativas /= w->nmissoes;
-    taxa_mortalidade = (herois_mortos / w->nherois) * 100;
+    if(w->nmissoes > 0)
+        media_tentativas /= w->nmissoes;
+    else
+        media_tentativas = 0;
+    
+    if(w->nherois > 0)
+        taxa_mortalidade = (herois_mortos / w->nherois) * 100;
+    else
+        taxa_mortalidade = 0;
     
     printf("EVENTOS TRATADOS: %d\n", w->eventos_tratados);
     printf("MISSOES CUMPRIDAS: %d/%d (%.1f%%)\n",
