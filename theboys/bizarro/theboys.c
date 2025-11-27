@@ -1,7 +1,6 @@
 // programa principal do projeto "The Boys - 2024/2"
 // Autor: MATHEUS ALVAREZ RUFASTO, GRR 20231949
 
-// seus #includes vão aqui
 #include <stdio.h>
 #include <stdlib.h>
 #include "fila.h"
@@ -9,7 +8,6 @@
 #include "conjunto.h"
 #include "boys.h"
 
-// seus #defines vão aqui
 #define T_INICIO 0
 #define T_FIM_DO_MUNDO 525600
 #define N_TAMANHO_MUNDO 20000
@@ -29,9 +27,7 @@
 #define MORRE 7
 #define MISSAO 8
 #define FIM 9
-// minimize o uso de variáveis globais
 
-// programa principal
 int main ()
 {
     //declarar variáveis
